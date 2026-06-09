@@ -26,8 +26,81 @@ def teacher_screen():
 
 def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
+    c1,c2= st.columns(2 , vertical_alignment = 'center' , gap='large')
 
-    st.header(f"""Welcome, {teacher_data['name']}""")
+
+    with c1:
+        header_dashboard()
+
+
+    with c2:
+        st.subheader(f"""Welcome, {teacher_data['name']}""")
+        if st.button("Logout ->" , type = 'secondary' , key='loginbackbtn'):
+            st.session_state['is_logged_in'] = False
+            del st.session_state.teacher_data
+            st.rerun()
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    if "current_teacher_tab" not in st.session_state:
+        st.session_state.current_teacher_tab = 'take attendance'
+
+    tab1 , tab2 , tab3 = st.columns(3)
+    with tab1:
+        type1 = "primary" if st.session_state.current_teacher_tab == 'take_attendance' else "tertiary"
+        if st.button('Take Attendance', type = type1 ,width = 'stretch' , icon = ':material/ar_on_you:'):
+            st.session_state.current_teacher_tab = 'take_attendance'
+            st.rerun()
+    with tab2:
+        type2 = "primary" if st.session_state.current_teacher_tab == 'manage_subjects' else "tertiary"
+        if st.button('Manage Subjects',type = type2 ,width = 'stretch' , icon = ':material/book_ribbon:'):
+            st.session_state.current_teacher_tab = 'manage_subjects'
+            st.rerun()
+    with tab3:
+        type3 = "primary" if st.session_state.current_teacher_tab == 'attendence_records' else "tertiary"
+        if st.button('Attendance Records',type = type3 , width = 'stretch' , icon = ':material/stacks:'):
+            st.session_state.current_teacher_tab = 'attendance_records'
+            st.rerun()
+
+    st.divider()
+
+
+    def teacher_tab_take_attendance():
+        st.header('Take AI Attendance')
+    
+    def teacher_tab_manage_subjects():
+        teacher_id = st.session_state.teacher_data['teacher_id']
+
+        col1 , col2 = st.columns(2)
+        with col1:
+            st.header('Manage Subjects')
+
+        with col2:
+            st.button('Create New Subject' , width = 'stretch')
+
+
+        
+
+    def teacher_tab_attendance_records():
+        st.header('Attendance Records')
+
+
+
+
+    if st.session_state.current_teacher_tab == "take_attendance":
+        teacher_tab_take_attendance()
+    if st.session_state.current_teacher_tab == "manage_subjects":
+        teacher_tab_manage_subjects()
+    if st.session_state.current_teacher_tab == "attendance_records":
+        teacher_tab_attendance_records()
+
+    footer_dashboard()
+
+
+
+    
+         
+
+    
 
      
 
