@@ -8,7 +8,7 @@ dlib-bin #face recognition
 
 #model(trained on millions of images) from github for face detection and for github models we have to install setuptools
 git+https://github.com/ageitgey/face_recognition_models
-setuptools>=70.0.0
+setuptools==69.5.1
 supabase #provied us database in free
 bcrypt
 
