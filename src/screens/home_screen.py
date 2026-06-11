@@ -18,14 +18,14 @@ def home_screen():
     col1 , col2 = st.columns(2  , gap = "large")
 
     with col1:
-        st.header("FOR TEACHERS")
+        st.markdown("## FOR TEACHERS")
         st.image("https://img.freepik.com/premium-photo/teacher-with-pointer-teaching-isolated-transparent-background-education-classroom-design_1029469-238301.jpg?w=2000" , width = 92)
         if st.button('Teacher Portal' , type = "primary", icon = ":material/arrow_outward:"):
             st.session_state['login_type'] = 'teacher'
             st.rerun()
 
     with col2:
-        st.header("FOR STUDENTS")
+        st.markdown("## FOR STUDENTS")
         st.image("https://static.vecteezy.com/system/resources/previews/042/350/900/non_2x/ai-generated-generated-image-teacher-in-front-of-chalkboard-free-photo.jpg" , width = 149 )
         if st.button ('Student Portal' , type = "primary" , icon = ":material/arrow_outward:"):
             st.session_state['login_type'] = 'student'
