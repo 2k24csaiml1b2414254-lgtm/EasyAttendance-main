@@ -23,17 +23,23 @@ def get_voice_embedding(audio_bytes):
         return None
 
 
-def identify_speaker(new_embedding , candidates_dict , threshold=0.65):
+def identify_speaker(new_embedding , candidates_dict , threshold=0.8):
     if new_embedding is None or not candidates_dict:
         return None , 0.0
     
     best_sid = None
-    best_score = -1.0
+    best_score = 0.5
 
 
-    for sid , stored_embedding in candidates_dict.items:
+    for sid , stored_embedding in candidates_dict.items():
         if stored_embedding:
-            similarity = np.dot(new_embedding , stored_embedding)
+            stored_embedding = np.array(stored_embedding)
+
+            similarity = np.dot(new_embedding, stored_embedding) / (
+                np.linalg.norm(new_embedding) *
+                np.linalg.norm(stored_embedding)
+            )
+            
             if similarity> best_score:
                 best_score = similarity
                 best_sid = sid
@@ -46,7 +52,7 @@ def identify_speaker(new_embedding , candidates_dict , threshold=0.65):
 
 
 
-def process_bulk_audio(audio_bytes , candidates_dict , threshold = 0.65):
+def process_bulk_audio(audio_bytes , candidates_dict , threshold = 0.8):
     try:
         encoder = load_voice_encoder()
 
@@ -69,12 +75,12 @@ def process_bulk_audio(audio_bytes , candidates_dict , threshold = 0.65):
 
 
             if sid:
-                if sid not in identify_speaker or score > identified_results[sid]:
+                if sid not in identified_results or score > identified_results[sid]:
                     identified_results[sid] = score
 
         return identified_results
 
 
     except Exception as e:
-        st.error('Bulk process error')
+        st.error(f'Bulk process error{e}')
         return {}

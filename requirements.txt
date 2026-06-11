@@ -1,3 +1,5 @@
+streamlit #very easy frontend library
+
 # utilities
 numpy
 pandas
@@ -13,9 +15,6 @@ bcrypt
 
 segno #for qr code generating
 pillow #helps in image preprocessing/resize and many more features
-
-streamlit #very easy frontend library
-
 
 librosa  #load and edit audio files
 resemblyzer #create embedding of voice

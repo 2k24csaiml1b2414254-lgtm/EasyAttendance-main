@@ -61,19 +61,7 @@ def get_trained_model():
     if len(X) == 0:
         return None
 
-    clf = SVC(
-        kernel='linear',
-        probability=True,
-        class_weight='balanced'
-    )
-
-    try:
-        clf.fit(X, y)
-    except ValueError:
-        return None
-
     return {
-        'clf': clf,
         'X': X,
         'y': y
     }
@@ -95,11 +83,9 @@ def predict_attendance(class_image_np):
     if not model_data:
         return detected_student, [], len(encodings)
 
-    clf = model_data['clf']
     X_train = model_data['X']
     y_train = model_data['y']
 
-    # Remove None values
     all_students = sorted(
         list(set([s for s in y_train if s is not None]))
     )
@@ -107,24 +93,29 @@ def predict_attendance(class_image_np):
     if len(all_students) == 0:
         return detected_student, [], len(encodings)
 
+    RESEMBLANCE_THRESHOLD = 0.45
+
     for encoding in encodings:
 
-        if len(all_students) >= 2:
-            predicted_id = int(clf.predict([encoding])[0])
-        else:
-            predicted_id = all_students[0]
+        best_id = None
+        best_distance = float("inf")
 
-        student_embedding = X_train[
-            y_train.index(predicted_id)
-        ]
+        for student_embedding, student_id in zip(X_train, y_train):
 
-        best_match_score = np.linalg.norm(
-            student_embedding - encoding
+            distance = np.linalg.norm(
+                np.array(student_embedding) - np.array(encoding)
+            )
+
+            if distance < best_distance:
+                best_distance = distance
+                best_id = student_id
+
+        # Debugging
+        print(
+            f"Detected Face -> Student {best_id}, Distance={best_distance:.4f}"
         )
 
-        resemblance_threshold = 0.6
-
-        if best_match_score <= resemblance_threshold:
-            detected_student[predicted_id] = True
+        if best_distance <= RESEMBLANCE_THRESHOLD:
+            detected_student[int(best_id)] = True
 
     return detected_student, all_students, len(encodings)

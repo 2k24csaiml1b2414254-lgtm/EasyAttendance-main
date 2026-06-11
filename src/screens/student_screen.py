@@ -118,13 +118,21 @@ def student_screen():
 
 
     with c2:
-        if st.button("Go back to home" , type = 'secondary' , key='lbb'):
-            st.session_state['student_login_type'] = None
+        if st.button("Go back to home ->", type='secondary', key='lbb'):
+            keys_to_remove = [
+                "teacher_login_type",
+                "teacher_data",
+                "current_teacher_tab",
+                "is_logged_in",
+                "user_role"
+            ]
+
+            for k in keys_to_remove:
+                st.session_state.pop(k, None)
+
+            st.session_state["login_type"] = None
+
             st.rerun()
-    st.markdown(
-    "<h2 style='text-align:center;'>Login using FaceID</h2>",
-    unsafe_allow_html=True
-    )
 
     show_registration = False
     photo_source = st.camera_input("Position your face in the center")
