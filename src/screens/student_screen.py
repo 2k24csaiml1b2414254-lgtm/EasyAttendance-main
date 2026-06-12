@@ -42,7 +42,9 @@ def student_dashboard():
 
     c1 , c2 = st.columns(2)
     with c1:
-        st.markdown('## Your Enrolled Subjects', unsafe_allow_html=True)
+        st.markdown(
+    "<h2 style='color:red'>Your Enrolled Subjects</h2>",
+    unsafe_allow_html=True)
     with c2:
         if st.button('Enroll in Subject' , type = 'primary' , width = 'stretch'):
             enroll_dialog()
