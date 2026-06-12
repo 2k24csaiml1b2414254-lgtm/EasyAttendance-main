@@ -23,12 +23,12 @@ def get_voice_embedding(audio_bytes):
         return None
 
 
-def identify_speaker(new_embedding , candidates_dict , threshold=0.8):
+def identify_speaker(new_embedding , candidates_dict , threshold=0.5):
     if new_embedding is None or not candidates_dict:
         return None , 0.0
     
     best_sid = None
-    best_score = 0.5
+    best_score = 0.3
 
 
     for sid , stored_embedding in candidates_dict.items():
@@ -52,7 +52,7 @@ def identify_speaker(new_embedding , candidates_dict , threshold=0.8):
 
 
 
-def process_bulk_audio(audio_bytes , candidates_dict , threshold = 0.8):
+def process_bulk_audio(audio_bytes , candidates_dict , threshold = 0.5):
     try:
         encoder = load_voice_encoder()
 
